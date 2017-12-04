@@ -25,11 +25,7 @@ fun wordsDistinct(passphrase: String): Boolean {
     return parts.size == distinctCount
 }
 
-fun part1(input: List<String>): Int {
-    return input.fold(0) { sum: Int, next ->
-        if (wordsDistinct(next)) sum + 1 else sum
-    }
-}
+fun part1(input: List<String>): Int = input.filter { wordsDistinct(it) }.count()
 
 fun anagramsDistinct(passphrase: String): Boolean {
     val parts = passphrase.split(' ')
@@ -38,8 +34,4 @@ fun anagramsDistinct(passphrase: String): Boolean {
     return parts.size == distinctCount
 }
 
-fun part2(input: List<String>): Int {
-    return input.fold(0) { sum: Int, next ->
-        if (anagramsDistinct(next)) sum + 1 else sum
-    }
-}
+fun part2(input: List<String>): Int = input.filter { anagramsDistinct(it) }.count()
