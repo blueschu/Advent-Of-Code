@@ -4,11 +4,12 @@ import java.io.File
 import kotlin.test.assertEquals
 
 fun main(args: Array<String>) {
-    assertEquals(part1("1122"), 3)
-    assertEquals(part1("923459"), 9)
-    assertEquals(part1("1111"), 4)
+    assertEquals(3, part1("1122"))
+    assertEquals(9, part1("923459"))
+    assertEquals(4, part1("1111"))
     println("Part 1: ${part1(input())}")
-    assertEquals(part2("1212"), 6)
+
+    assertEquals(6, part2("1212"))
     println("Part 2: ${part2(input())}")
     println("Input Last: \"${input().last()}\"")
 }
