@@ -18,8 +18,8 @@ fun input(): String = File("resources/y2017/day01.txt")
     .bufferedReader()
     .use { it.readText() }.dropLast(1)
 
-fun part1(input: String): Any {
-    val digitSequence = input.map { it.toString() }.map { it.toInt() }
+fun part1(input: String): Int {
+    val digitSequence = input.map { it.toString().toInt() }
     var prior: Int = digitSequence.last()
     return digitSequence.fold(0) { sum, next ->
         val result = if (prior == next) sum + next else sum
@@ -28,14 +28,12 @@ fun part1(input: String): Any {
     }
 }
 
-fun part2(input: String): Any {
-    val digitSequence = input.map { it.toString() }.map { it.toInt() }
+fun part2(input: String): Int {
+    val digitSequence = input.map { it.toString().toInt() }
     val length = digitSequence.count()
     val offset: Int = length / 2
-    return digitSequence.foldIndexed(0) { index, sum, next ->
-        if (digitSequence.elementAt((index + offset) % length) == next) {
-            sum + next
-        } else sum
-    }
+    return digitSequence.filterIndexed { index, next ->
+        digitSequence.elementAt((index + offset) % length) == next
+    }.sum()
 }
 
