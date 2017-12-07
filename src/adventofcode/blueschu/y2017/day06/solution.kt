@@ -9,11 +9,12 @@ fun input(): List<Byte> {
         .use { it.readText() }
         .trim()
         .split(Regex("\\s+"))
-        .map { it.toByte() } // only 119 blocks in input, might as well as memory
+        // only 119 blocks in input, might as well save some memory by using bytes
+        .map { it.toByte() }
 }
 
 fun main(args: Array<String>) {
-    // [findAllocationLoop] extended to produce the solution to both parts of the puzzle
+    // [findAllocationLoop] has been extended to produce the solutions for both parts of the puzzle
     assertEquals(AllocationLoop(2, 1), findAllocationLoop(listOf(0)))
     assertEquals(AllocationLoop(5, 4), findAllocationLoop(listOf(0, 2, 7, 0)))
     println("Solution: ${findAllocationLoop(input())}")
@@ -28,9 +29,9 @@ class MemoryBanks(private val memory: ByteArray) {
 
     fun reallocate() {
         val largestBankIndex = mostPopulatedBankIndex()
-        var blockCount = memory[largestBankIndex] // blocks in largest bank
+        var blockCount = memory[largestBankIndex] // blocks in the largest bank
         var seekingIndex = (largestBankIndex + 1) % memory.size
-        memory[largestBankIndex] = 0 // empty the bank
+        memory[largestBankIndex] = 0 // empty the selected bank of all blocks
 
         while (blockCount > 0) {
             memory[seekingIndex]++
