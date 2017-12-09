@@ -23,12 +23,14 @@ fun runDemoAssertions() {
         "gyxo (61)",
         "cntj (57)"))
     assertEquals("tknk", demoTower.name)
+    assertEquals(60, newWeightOfBadNode(demoTower))
 }
 
 fun main(args: Array<String>) {
     runDemoAssertions()
     val towerRoot = parseTower(input())
     println("Part 1: ${towerRoot.name}")
+    println("Part 2: ${newWeightOfBadNode(towerRoot)}")
 }
 
 data class TowerNode(val name: String, val weight: Int) {
@@ -83,4 +85,47 @@ fun parseTower(structureList: List<String>): TowerNode {
 
     // return the root node
     return nodes.values.first().findRoot()
+}
+
+class BranchAlreadyBalancedException : RuntimeException()
+
+// Could be more time efficient by iterating over child indexes
+// However, using groupBy allows for a more concise implementation
+fun nextUnbalancedNode(node: TowerNode): TowerNode {
+    val nodes: List<TowerNode> = node.children
+    if (2 == nodes.size) {
+        return try {
+            nextUnbalancedNode(nodes[0])
+        } catch (e: BranchAlreadyBalancedException) {
+            nextUnbalancedNode(nodes[1])
+        }
+    }
+
+    return nodes.groupBy(TowerNode::branchWeight)
+        .values
+        .find { it.size == 1 }?.get(0) ?: throw BranchAlreadyBalancedException()
+}
+
+fun newWeightOfBadNode(tower: TowerNode): Int {
+    var badNode = tower
+    // Climb tower until branch is balanced
+    try {
+        while (true) {
+            badNode = nextUnbalancedNode(badNode)
+        }
+    } catch (e: BranchAlreadyBalancedException) {
+
+    }
+    // Ugly and inefficient, but quickest to type
+    val correctBranchWeight = badNode
+        .parent!!
+        .children
+        .groupBy(TowerNode::branchWeight)
+        .values
+        .find { it.size > 1 }!!
+        .get(0)
+        .branchWeight()
+    val delta = badNode.branchWeight() - correctBranchWeight
+
+    return badNode.weight - delta
 }
