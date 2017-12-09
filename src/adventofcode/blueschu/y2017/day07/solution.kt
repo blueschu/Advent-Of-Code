@@ -114,9 +114,9 @@ fun newWeightOfBadNode(tower: TowerNode): Int {
             badNode = nextUnbalancedNode(badNode)
         }
     } catch (e: BranchAlreadyBalancedException) {
-
+        // all of the node's children are balanced - the bad node has been found
     }
-    // Ugly and inefficient, but quickest to type
+    // Ugly and rather inefficient, but its functional
     val correctBranchWeight = badNode
         .parent!!
         .children
