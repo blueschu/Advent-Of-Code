@@ -3,39 +3,39 @@ package adventofcode.blueschu.y2017.day10
 import java.io.File
 import kotlin.test.assertEquals
 
-val input by lazy {
+val input: String by lazy {
     File("resources/y2017/day10.txt")
         .bufferedReader()
-        .use { it.readText().trim() }
-        .split(',')
-        .map(String::toInt)
+        .use { it.readText() }
+        .trim()
 }
 
 fun main(args: Array<String>) {
-    val testKnot = Knot(5)
-    assertEquals(12, part1(listOf(3, 4, 1, 5), testKnot))
+    assertEquals(12, part1("3,4,1,5", Knot(circleSize = 5)))
     println("Part 1: ${part1(input)}")
 }
 
-fun part1(lengths: List<Int>, knot: Knot = Knot()): Int {
+fun part1(lengthString: String, knot: Knot = Knot()): Int {
+    val lengths = lengthString
+        .split(',')
+        .map(String::toInt)
+
     lengths.forEach {
         knot.twistLength(it)
     }
     return knot.hash
 }
 
-class Knot(private val stringSize: Int = 256) {
-    // array of [0,1,2,3,4...stringSize - 1]
-    private val _circleMarks = Array<Int>(stringSize, { it })
+class Knot(private val circleSize: Int = 256) {
+    // array of [0,1,2,3,4...circleSize - 1]
+    private val _circleMarks = Array<Int>(circleSize, { it })
 
     // circle marks rotated to their true position
     val circleMarks get() = _circleMarks.copyOf().apply { rotate(position) }
 
+    // product of first and second mark when the circle has been rotated to its true position
     val hash: Int
-        get() {
-            val circle = circleMarks
-            return circle[0] * circle[1]
-        }
+        get() = _circleMarks[circleSize - position] * _circleMarks[circleSize - position + 1]
 
     private var skipSize = 0
 
@@ -49,7 +49,7 @@ class Knot(private val stringSize: Int = 256) {
     // keep "position" always at the first index of the array
     private fun advancePos(length: Int) {
         _circleMarks.rotate(-(length + skipSize))
-        position = (position + length + skipSize) % stringSize
+        position = (position + length + skipSize) % circleSize
         skipSize++
     }
 }
