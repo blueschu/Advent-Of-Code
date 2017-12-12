@@ -5,8 +5,7 @@ import kotlin.test.assertEquals
 
 fun input(): List<List<Int>> = File("resources/y2017/day02.txt")
     .readLines()
-    .map { it.split('\t') }
-    .map { it.map { it.toInt() } }
+    .map { it.split('\t').map(String::toInt) }
 
 fun main(args: Array<String>) {
     assertEquals(18, part1(listOf(
@@ -21,33 +20,27 @@ fun main(args: Array<String>) {
     println("Part 2: ${part2(input())}")
 }
 
-fun part1(input: List<List<Int>>): Int {
-    return input.fold (emptyList()) { sum: List<Int>, next ->
-        sum + (next.max()!! - next.min()!!)
-    }.sum()
+fun part1(table: List<List<Int>>): Int {
+    return table.map { (it.max()!! - it.min()!!) }.sum()
 }
 
-fun part2(input: List<List<Int>>): Int {
-    return input.fold (emptyList()) { sum: List<Int>, next ->
-        var offset = 1
+fun part2(table: List<List<Int>>): Int {
+    return table.map { row ->
         var result = 0
-        loop@for (i in 0 until next.count() - 1) {
-            for (j in offset until next.count()) {
-                val num = next.elementAt(j)
-                val dem = next.elementAt(i)
-                if (num % dem == 0) {
-                    //println("FOUND $num/$dem")
-                    result = num / dem
+        loop@for (i in 0 until row.count() - 1) {
+            for (j in i + 1 until row.count()) {
+                val num = row[j]
+                val dem = row[i]
+                result = if (num % dem == 0) {
+                     num / dem
                 } else if(dem % num == 0) {
-                    //println("FOUND $dem/$num")
-                    result = dem / num
-                }
+                    dem / num
+                } else result
                 if (result != 0) {
                     break@loop
                 }
             }
-            offset += 1
         }
-        sum + result
+        result
     }.sum()
 }
