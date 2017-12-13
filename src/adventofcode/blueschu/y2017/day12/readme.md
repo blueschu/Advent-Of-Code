@@ -33,7 +33,7 @@ Therefore, a total of `6` programs are in this group; all but program `1`, which
 
 How many programs are in the group that contains program ID `0`?
 
-###Part Two 
+### Part Two 
 
 There are more programs than just the ones in the group containing program ID `0`. The rest of them have no way of reaching that group, and still might have no way of reaching each other.
 
