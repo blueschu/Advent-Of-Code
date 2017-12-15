@@ -87,8 +87,8 @@ fun part2(disk: Array<BitSet>): Int {
 
     for ((row: Int, rowBits: BitSet) in disk.withIndex()) {
 
-        for (col in 0 until rowBits.size()) { // ignore first sign bit
-            if (rowBits[col]) { // square is used
+        for (col in 0 until rowBits.size()) {
+            if (rowBits[col]) { // if the grid square is "used"
 
                 val cellAbove = row != 0 && disk[row - 1][col]
                 val cellLeft = col != 0 && disk[row][col - 1]
@@ -99,7 +99,7 @@ fun part2(disk: Array<BitSet>): Int {
                     addToGroup(groupAbove, Region(row, col))
                     mergeGroups(groupAbove, groupLeft)
 
-                } else { // single adjacent
+                } else {
                     when {
                         cellAbove -> // square above is also used
                             // get the group of the square above
@@ -113,7 +113,7 @@ fun part2(disk: Array<BitSet>): Int {
                                 // add the current square to the same group
                                 addToGroup(it, Region(row, col))
                             }
-                        else -> // adjacent square exists neither above nor to the left;
+                        else -> // neither the square above nor the square to the left is used
                             // add the current square to a new group
                             addToGroup(groups.size, Region(row, col))
                     }
