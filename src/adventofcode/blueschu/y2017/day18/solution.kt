@@ -140,6 +140,7 @@ sealed class Interpreter {
 
     protected open fun reset() {
         pos = 0
+        toneQueue.clear()
     }
 }
 
@@ -169,7 +170,6 @@ class SoloInterpreter : Interpreter() {
     override fun reset() {
         super.reset()
         recoverCalled = false
-        toneQueue.clear()
     }
 
 }
