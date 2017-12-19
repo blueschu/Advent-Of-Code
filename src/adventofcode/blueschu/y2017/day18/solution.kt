@@ -207,6 +207,10 @@ class DuetInterpreter(val id: Long, private val prog: List<DuetInstruction>) : I
         registerTable[instr.register.key] = toneQueue.remove()
     }
 
+    override fun reset() {
+        super.reset()
+        sentCount = 0
+    }
 }
 
 fun part1(lines: List<String>): Int {
