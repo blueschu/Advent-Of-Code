@@ -8,10 +8,10 @@ const val PUZZLE_INPUT = 344
 fun main(args: Array<String>) {
     assertEquals(638, part1(3))
     println("Part 1: ${part1(PUZZLE_INPUT)}")
-
-//    println("Part 2: ${part2(PUZZLE_INPUT)}")
+    println("Part 2: ${part2(PUZZLE_INPUT)}")
 }
 
+// curiously expanding circular buffer
 class HurricaneBuffer(private val step: Int) {
     // buffer begins with a single value: 0
     val buffer = mutableListOf(0)
@@ -38,16 +38,15 @@ fun part1(step: Int): Int {
     return hurricaneBuffer.nextBufferItem
 }
 
-//// shameful brute-force approach
-//// todo Write an actual algorithm
-//fun part2(step: Int): Int {
-//    val hurricaneBuffer = HurricaneBuffer(step)
-//    (1..50_000_000).forEach {
-//        hurricaneBuffer.cycle()
-//        if (it % 100_000 == 0) {
-//            println(it)
-//        }
-//    }
-//    return hurricaneBuffer.buffer[1]
-//}
-
+fun part2(step: Int): Int {
+    var bufferSize = 1
+    var result = 0
+    var pos = 0
+    for (i in 1..50_000_000) {
+        pos = (pos + step) % bufferSize++ + 1
+        if (pos == 1) {
+            result = i
+        }
+    }
+    return result
+}
