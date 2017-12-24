@@ -18,7 +18,7 @@ val input: List<String> by lazy {
 fun main(args: Array<String>) {
     println("Part 1: ${renderImage(input, 5)}")
 
-    println("Part 1: ${renderImage(input, 18)}")
+    println("Part 2: ${renderImage(input, 18)}")
 }
 
 // Two-Dim Arrays of Booleans are less memory efficient than
@@ -47,6 +47,8 @@ class BitImage(_image: Array<BitSet> = initialImage) {
         val newDim = image.size + (image.size / chunkDim)
         val buffer = Array(newDim) { BitSet(newDim) }
 
+        // writeOffset*s increment with each iteration to account for the
+        // increase in the resolution of each chunk (2 => 3, 3 => 4).
         for ((writeOffsetRow, row) in (0 until image.size step chunkDim).withIndex()) {
             for ((writeOffsetCol, col) in (0 until image.size step chunkDim).withIndex()) {
                 val chunk = BoolGrid(chunkDim, { rowOffset ->

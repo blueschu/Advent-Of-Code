@@ -88,4 +88,4 @@ How many pixels stay on after `5` iterations?
 
 ### Part Two
 
-How many pixels stay on after 18 iterations?
+How many pixels stay on after `18` iterations?
