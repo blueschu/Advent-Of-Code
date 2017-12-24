@@ -16,6 +16,13 @@ fun main(args: Array<String>) {
         "...")))
 
     println("Part 1: ${part1(input)}")
+
+    assertEquals(2511944, part2(listOf(
+        "..#",
+        "#..",
+        "...")))
+
+    println("Part 2: ${part2(input)}")
 }
 
 data class Point(var x: Int, var y: Int)
@@ -38,39 +45,86 @@ enum class Direction {
     }
 }
 
-class InfectionGrid(val infectedNodes: MutableList<Point>, carrierPos: Point) {
+class Position(val loc: Point = Point(0, 0), facing: Direction = Direction.NORTH) {
+    var facing = facing
+        private set
 
-    inner class Carrier(val pos: Point) {
-
-        var infectionCount = 0
-
-        var facing = Direction.NORTH
-            private set
-
-        fun runBurst() {
-            if (pos in infectedNodes) {
-                facing = facing.turnedRight()
-                infectedNodes.remove(pos)
-            } else {
-                facing = facing.turnedLeft()
-                infectedNodes.add(pos.copy())
-                infectionCount++
-            }
-            advance()
-        }
-
-        private fun advance() = when (facing) {
-            Direction.NORTH -> pos.y += 1
-            Direction.EAST -> pos.x += 1
-            Direction.SOUTH -> pos.y -= 1
-            Direction.WEST -> pos.x -= 1
-        }
+    fun advance() = when (facing) {
+        Direction.NORTH -> loc.y += 1
+        Direction.EAST -> loc.x += 1
+        Direction.SOUTH -> loc.y -= 1
+        Direction.WEST -> loc.x -= 1
     }
 
-    val carrier = Carrier(carrierPos)
+    fun turnLeft() {
+        facing = facing.turnedLeft()
+    }
+
+    fun turnRight() {
+        facing = facing.turnedRight()
+    }
 }
 
-fun parseInfectionGrid(desc: List<String>): InfectionGrid {
+abstract class AbstractCarrier(val pos: Position) {
+    var infectionCount = 0
+        protected set
+
+    abstract fun burst()
+}
+
+// Carrier for part one
+class CarrierOne(val infectedNodes: MutableList<Point>,
+                 pos: Position = Position()) : AbstractCarrier(pos) {
+
+    override fun burst() {
+        val position = pos.loc
+        if (position in infectedNodes) {
+            pos.turnRight()
+            infectedNodes.remove(position)
+        } else {
+            pos.turnLeft()
+            infectedNodes.add(position.copy())
+            infectionCount++
+        }
+        pos.advance()
+    }
+}
+
+// For part two
+enum class NodeStatus { INFECTED, CLEAN, FLAGGED, WEAKENED }
+
+// Carrier for part two
+class CarrierTwo(val affectedNodes: MutableMap<Point, NodeStatus>,
+                 pos: Position = Position()) : AbstractCarrier(pos) {
+
+    override fun burst() {
+        val position = pos.loc
+        when (affectedNodes.getOrDefault(position, NodeStatus.CLEAN)) {
+            NodeStatus.INFECTED -> {
+                affectedNodes.put(position.copy(), NodeStatus.FLAGGED)
+                pos.turnRight()
+            }
+            NodeStatus.CLEAN -> {
+                affectedNodes.put(position.copy(), NodeStatus.WEAKENED)
+                pos.turnLeft()
+            }
+            NodeStatus.FLAGGED -> {
+                affectedNodes.remove(position)
+                // reverse direction
+                pos.turnRight()
+                pos.turnRight()
+            }
+            NodeStatus.WEAKENED -> {
+                affectedNodes.put(position.copy(), NodeStatus.INFECTED)
+                // no change in direction
+                infectionCount++
+            }
+        }
+        pos.advance()
+    }
+}
+
+fun parseInfectedNodes(desc: List<String>): MutableList<Point> {
     // grid assumed to be a square with odd dimensions
     val midOffset = (desc.size - 1) / 2
     val infectedNodes = mutableListOf<Point>()
@@ -82,14 +136,29 @@ fun parseInfectionGrid(desc: List<String>): InfectionGrid {
             }
         }
     }
-    return InfectionGrid(infectedNodes, Point(0,0))
+    return infectedNodes
 }
 
 fun part1(infectionDesc: List<String>): Int {
-    val infectionGrid = parseInfectionGrid(infectionDesc)
+    val infectedNodes = parseInfectedNodes(infectionDesc)
+    val carrier = CarrierOne(infectedNodes)
+
     repeat(times = 10_000) {
-        infectionGrid.carrier.runBurst()
+        carrier.burst()
     }
 
-    return infectionGrid.carrier.infectionCount
+    return carrier.infectionCount
+}
+
+fun part2(infectionDesc: List<String>): Int {
+    val affectedNodes = parseInfectedNodes(infectionDesc)
+        .associateBy ({ it }, {NodeStatus.INFECTED})
+
+    val carrier = CarrierTwo(affectedNodes.toMutableMap())
+
+    repeat(times = 10_000_000) {
+        carrier.burst()
+    }
+
+    return carrier.infectionCount
 }
