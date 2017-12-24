@@ -73,14 +73,14 @@ fun parseDuetInstruction(line: String): DuetInstruction {
 }
 
 // Maps register key to their respective values while defaulting to 0 for uninitiated registers
-class RegisterRepository<K, V : Number> {
+class RegisterRepository<K, V : Number>(val registerInitializer: Long = 0) {
     val registerTable = mutableMapOf<K, V>()
 
     operator fun get(registerKey: K): V {
         if (registerKey !in registerTable) {
             // 0L can be safely converted to any Number subtype
             @Suppress("UNCHECKED_CAST")
-            registerTable += registerKey to 0L as V
+            registerTable += registerKey to registerInitializer as V
         }
         return registerTable[registerKey] ?:
             throw IllegalStateException("Register '$registerKey' missing")
