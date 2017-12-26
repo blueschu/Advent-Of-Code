@@ -107,3 +107,6 @@ fun part2(lines: List<String>): Long {
     interpreter.execute(instructions)
     return interpreter.registerTable['h']
 }
+
+// registers b and c altered by initializing a to 1
+// b and c are only referenced in conditions near the end of the program
