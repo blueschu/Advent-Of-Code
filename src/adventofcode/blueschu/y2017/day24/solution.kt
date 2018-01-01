@@ -19,7 +19,8 @@ fun main(args: Array<String>) {
         "3/5",
         "0/1",
         "10/1",
-        "9/10")
+        "9/10"
+    )
 
     assertEquals(31, part1(exampleSegments))
     println("Part 1: ${part1(input)}")
@@ -51,29 +52,37 @@ fun parseBridgeSegment(token: String): BridgeSegment {
 }
 
 // RAM thirsty devil
-fun findNextBridges(bridge: Bridge,
-                    segmentPool: List<BridgeSegment>): List<Bridge> {
+fun findNextBridges(bridge: Bridge, segmentPool: List<BridgeSegment>): List<Bridge> {
     val endPins = bridge.last().second
     val validSegments = segmentPool.filter { it.hasEnd(endPins) }
         .map { if (it.first == endPins) it else it.flipped() }
 
     return if (validSegments.isEmpty()) listOf(bridge) else {
         listOf(bridge) + validSegments.flatMap { next ->
-            findNextBridges(bridge.plus(next), segmentPool.filterNot { it matches next }) }
+            findNextBridges(
+                bridge.plus(next),
+                segmentPool.filterNot { it matches next }
+            )
+        }
     }
 }
 
 fun part1(segmentDesc: List<String>): Int {
     val segments = segmentDesc.map { parseBridgeSegment(it) }
 
-    return findNextBridges(listOf(BridgeSegment(0,0)), segments).map(Bridge::strength).max()
+    val bridges = findNextBridges(listOf(BridgeSegment(0,0)), segments)
+
+    return bridges.map(Bridge::strength).max()
         ?: throw IllegalArgumentException("No possible bridges for the specified segments")
 }
 
 fun part2(segmentDesc: List<String>): Int {
     val segments = segmentDesc.map { parseBridgeSegment(it) }
 
-    val bridges: List<Bridge> = findNextBridges(listOf(BridgeSegment(0,0)), segments)
+    val bridges: List<Bridge> = findNextBridges(
+        listOf(BridgeSegment(0, 0)),
+        segments
+    )
 
     val maxLength = bridges.map(Bridge::size).max()
         ?: throw IllegalArgumentException("No possible bridges for the specified segments")

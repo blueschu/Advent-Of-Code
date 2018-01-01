@@ -10,10 +10,12 @@ val input: List<String> by lazy {
 }
 
 fun main(args: Array<String>) {
-    val exampleFirewall = listOf("0: 3",
+    val exampleFirewall = listOf(
+        "0: 3",
         "1: 2",
         "4: 4",
-        "6: 4")
+        "6: 4"
+    )
     assertEquals(24, part1(parseFirewall(exampleFirewall)))
     println("Part 1: ${part1(parseFirewall(input))}")
 

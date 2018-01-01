@@ -20,7 +20,7 @@ fun input(): String = File("resources/y2017/day01.txt")
 fun part1(input: String): Int {
     val digitSequence = input.map { it.toString().toInt() }
     val len = digitSequence.size
-    return digitSequence.filterIndexed {index, next -> next == digitSequence[(index + 1) % len] }.sum()
+    return digitSequence.filterIndexed { index, next -> next == digitSequence[(index + 1) % len] }.sum()
 }
 
 fun part2(input: String): Int {

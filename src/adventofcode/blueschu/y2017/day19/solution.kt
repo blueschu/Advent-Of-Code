@@ -16,7 +16,8 @@ fun main(args: Array<String>) {
         "     A  |  C    ",
         " F---|----E|--+ ",
         "     |  |  |  D ",
-        "     +B-+  +--+ ")))
+        "     +B-+  +--+ "))
+    )
     val (chars, steps) = walkMap(input)
     println("Part 1: $chars")
     println("Part 2: $steps")
@@ -58,7 +59,8 @@ class MapWalker(val tubeMap: List<String>) {
                 facing = when {
                     adjacentChar(left) != ' ' -> left
                     adjacentChar(right) != ' ' -> right
-                    else -> throw IllegalStateException("Map contains no viable path at $position")
+                    else -> throw IllegalStateException(
+                        "Map contains no viable path at $position")
                 }
             }
             ' ' -> reachedEnd = true

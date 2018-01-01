@@ -28,7 +28,7 @@ typealias BoolGrid = Array<Array<Boolean>>
 
 // For ease of debugging
 fun BoolGrid.render(lineSeparator: String = "/") =
-    joinToString(lineSeparator) { it.joinToString("") {if (it) "#" else "."} }
+    joinToString(lineSeparator) { it.joinToString("") { if (it) "#" else "." } }
 
 fun BoolGrid.transposed() = BoolGrid(size, { row ->
     Array(size, { col -> this[col][row] })
@@ -64,9 +64,11 @@ class BitImage(_image: Array<BitSet> = initialImage) {
 
                 // write new chunk to the buffer
                 for (chunkRow in 0 until newChunk.size) {
-                    for (chunkCol in 0  until newChunk.size) {
-                        buffer[row + chunkRow + writeOffsetRow]
-                            .set(col + chunkCol + writeOffsetCol, newChunk[chunkRow][chunkCol])
+                    for (chunkCol in 0 until newChunk.size) {
+                        buffer[row + chunkRow + writeOffsetRow].set(
+                            col + chunkCol + writeOffsetCol,
+                            newChunk[chunkRow][chunkCol]
+                        )
                     }
                 }
             }
@@ -113,7 +115,7 @@ fun parseEnhancementRule(token: String): EnhancementRule {
 
 fun renderImage(ruleDesc: List<String>, transformCount: Int): Int {
     val rules = ruleDesc.map { parseEnhancementRule(it) }
-    val image =  BitImage()
+    val image = BitImage()
     repeat(times = transformCount) {
         image.transform(rules)
     }

@@ -11,7 +11,8 @@ val input: List<String> by lazy {
 }
 
 fun main(args: Array<String>) {
-    assertEquals(4, part1(listOf("set a 1",
+    assertEquals(4, part1(listOf(
+        "set a 1",
         "add a 2",
         "mul a a",
         "mod a 5",
@@ -20,16 +21,19 @@ fun main(args: Array<String>) {
         "rcv a",
         "jgz a -1",
         "set a 1",
-        "jgz a -2")))
+        "jgz a -2"))
+    )
     println("Part 1: ${part1(input)}")
 
-    assertEquals(3, part2(listOf("snd 1",
+    assertEquals(3, part2(listOf(
+        "snd 1",
         "snd 2",
         "snd p",
         "rcv a",
         "rcv b",
         "rcv c",
-        "rcv d")))
+        "rcv d"))
+    )
     println("Part 2: ${part2(input)}")
 }
 
@@ -177,7 +181,8 @@ class SoloInterpreter : Interpreter() {
 // Implementation for Part Two
 class DuetInterpreter(val id: Long, private val prog: List<DuetInstruction>) : Interpreter() {
     // Initialize 'p' register with instance ID
-    override val registerTable = RegisterRepository<Char?, Long>().apply { set('p', id) }
+    override val registerTable =
+        RegisterRepository<Char?, Long>().apply { set('p', id) }
 
     val nextInstr get() = prog[pos]
 
@@ -229,7 +234,7 @@ fun part2(lines: List<String>): Int {
         DuetInterpreter(id = 1, prog = instructions)
     ).apply { first pairWith second }
 
-    with (interpreters) {
+    with(interpreters) {
         while (!(first.locked && second.locked)) {
             if (!first.locked) {
                 first.processNext()

@@ -27,15 +27,15 @@ fun part1(table: List<List<Int>>): Int {
 fun part2(table: List<List<Int>>): Int {
     return table.map { row ->
         var result = 0
-        loop@for (i in 0 until row.count() - 1) {
+        loop@ for (i in 0 until row.count() - 1) {
             for (j in i + 1 until row.count()) {
                 val num = row[j]
                 val dem = row[i]
-                result = if (num % dem == 0) {
-                     num / dem
-                } else if(dem % num == 0) {
-                    dem / num
-                } else result
+                result = when {
+                    num % dem == 0 -> num / dem
+                    dem % num == 0 -> dem / num
+                    else -> result
+                }
                 if (result != 0) {
                     break@loop
                 }

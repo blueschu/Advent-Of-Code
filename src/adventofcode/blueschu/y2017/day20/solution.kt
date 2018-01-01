@@ -17,7 +17,8 @@ fun main(args: Array<String>) {
         "p=<-6,0,0>, v=<3,0,0>, a=<0,0,0>",
         "p=<-4,0,0>, v=<2,0,0>, a=<0,0,0>",
         "p=<-2,0,0>, v=<1,0,0>, a=<0,0,0>",
-        "p=<3,0,0>, v=<-1,0,0>, a=<0,0,0>")))
+        "p=<3,0,0>, v=<-1,0,0>, a=<0,0,0>"))
+    )
     println("Part 2: ${part2(input)}")
 }
 
@@ -34,23 +35,32 @@ data class CartesianVector(var x: Int, var y: Int, var z: Int) {
         offset(delta.x, delta.y, delta.z)
 }
 
-data class Particle(val pos: CartesianVector,
-                    val vel: CartesianVector,
-                    val acc: CartesianVector)
+data class Particle(
+    val pos: CartesianVector,
+    val vel: CartesianVector,
+    val acc: CartesianVector
+)
 
 fun parseParticle(token: String): Particle {
     val pattern = ("p=<(-?\\d+),(-?\\d+),(-?\\d+)>, " +
         "v=<(-?\\d+),(-?\\d+),(-?\\d+)>, " +
         "a=<(-?\\d+),(-?\\d+),(-?\\d+)>").toRegex()
 
-    val result = pattern.matchEntire(token)?.groupValues?.takeLast(9)?.map(String::toInt)
+    val match = pattern.matchEntire(token)
         ?: throw IllegalArgumentException("Particle could not be parsed: $token")
+
+    val result = match
+        .groupValues
+        .takeLast(9)
+        .map(String::toInt)
 
     val (pos, vel, acc) = result.chunked(3)
 
-    return Particle(pos = CartesianVector(pos[0], pos[1], pos[2]),
+    return Particle(
+        pos = CartesianVector(pos[0], pos[1], pos[2]),
         vel = CartesianVector(vel[0], vel[1], vel[2]),
-        acc = CartesianVector(acc[0], acc[1], acc[2]))
+        acc = CartesianVector(acc[0], acc[1], acc[2])
+    )
 }
 
 fun part1(particlesDesc: List<String>): Int {

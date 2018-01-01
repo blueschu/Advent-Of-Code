@@ -17,7 +17,8 @@ fun main(args: Array<String>) {
         "3 <-> 2, 4",
         "4 <-> 2, 3, 6",
         "5 <-> 6",
-        "6 <-> 4, 5")
+        "6 <-> 4, 5"
+    )
 
     assertEquals(6, part1(exampleNetwork))
     println("Part 1: ${part1(input)}")
@@ -67,7 +68,7 @@ fun parseNetwork(description: List<String>): Array<NetworkNode> {
     }
 
     // create a node for each id
-    val nodes = Array(parsedDescriptions.size, { NetworkNode(it)} )
+    val nodes = Array(parsedDescriptions.size, { NetworkNode(it) })
 
     // connect the nodes
     for ((id, connections) in parsedDescriptions.withIndex()) {
@@ -80,7 +81,7 @@ fun parseNetwork(description: List<String>): Array<NetworkNode> {
 }
 
 fun findDistinctNetworks(nodes: Array<NetworkNode>): List<List<NetworkNode>> {
-    val nodePool= nodes.associateBy { it.id }.toMutableMap()
+    val nodePool = nodes.associateBy { it.id }.toMutableMap()
 
     val networks = mutableListOf<List<NetworkNode>>()
 
@@ -94,6 +95,8 @@ fun findDistinctNetworks(nodes: Array<NetworkNode>): List<List<NetworkNode>> {
     return networks
 }
 
-fun part1(networkDescription: List<String>): Int = parseNetwork(networkDescription).first().findAllNodes().size
+fun part1(networkDescription: List<String>): Int =
+    parseNetwork(networkDescription).first().findAllNodes().size
 
-fun part2(networkDescription: List<String>): Int = findDistinctNetworks(parseNetwork(networkDescription)).size
+fun part2(networkDescription: List<String>): Int =
+    findDistinctNetworks(parseNetwork(networkDescription)).size

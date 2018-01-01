@@ -13,10 +13,10 @@ val input: List<String> by lazy {
 }
 
 fun main(args: Array<String>) {
-    assertEquals("baedc", part1(listOf("s1","x3/4","pe/b"), floorSize = 5))
+    assertEquals("baedc", part1(listOf("s1", "x3/4", "pe/b"), floorSize = 5))
     println("Part 1: ${part1(input)}")
 
-    part2(listOf("s1","x3/4","pe/b"), floorSize = 5)
+    part2(listOf("s1", "x3/4", "pe/b"), floorSize = 5)
     println("Part 2: ${part2(input)}")
 }
 
@@ -46,8 +46,10 @@ class DanceFloor(floorSize: Int, charGen: CharIterator) {
         when (danceMove) {
             is Spin -> dancers.rotate(danceMove.mag)
             is Exchange -> exchangeDancers(danceMove.posA, danceMove.posB)
-            is Partner -> exchangeDancers(dancers.indexOf(danceMove.dancerA),
-                dancers.indexOf(danceMove.dancerB))
+            is Partner -> exchangeDancers(
+                dancers.indexOf(danceMove.dancerA),
+                dancers.indexOf(danceMove.dancerB)
+            )
         }
     }
 
@@ -65,8 +67,8 @@ class DanceFloor(floorSize: Int, charGen: CharIterator) {
 
 fun part1(moveStrings: List<String>, floorSize: Int = 16): String {
     val moves = moveStrings.map { parseDanceMove(it) }
-    return DanceFloor(floorSize).also {
-        floor -> moves.forEach { move -> floor.runMove(move) }
+    return DanceFloor(floorSize).also { floor ->
+        moves.forEach { move -> floor.runMove(move) }
     }.toString()
 }
 

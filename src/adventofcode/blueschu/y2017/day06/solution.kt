@@ -41,7 +41,7 @@ class MemoryBanks(private val memory: ByteArray) {
     }
 
     private fun mostPopulatedBankIndex(): Int {
-        var maxVal= Byte.MIN_VALUE
+        var maxVal = Byte.MIN_VALUE
         var maxIndex = 0
         for ((index, value) in memory.withIndex()) {
             if (value > maxVal) {

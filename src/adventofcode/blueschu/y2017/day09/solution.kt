@@ -1,6 +1,6 @@
 package adventofcode.blueschu.y2017.day09
 
-import java.io.*
+import java.io.File
 import kotlin.test.assertEquals
 
 fun input() = File("resources/y2017/day09.txt")
@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     assertEquals(1, part1("{}".asIterable()))
     assertEquals(6, part1("{{{}}}".asIterable()))
     assertEquals(5, part1("{{},{}}".asIterable()))
-    assertEquals(16,part1(" {{{},{},{{}}}}".asIterable()))
+    assertEquals(16, part1(" {{{},{},{{}}}}".asIterable()))
     assertEquals(1, part1("{<a>,<a>,<a>,<a>}".asIterable()))
     assertEquals(9, part1("{{<ab>},{<ab>},{<ab>},{<ab>}}".asIterable()))
     assertEquals(9, part1("{{<!!>},{<!!>},{<!!>},{<!!>}}".asIterable()))
@@ -62,8 +62,7 @@ fun part2(input: Iterable<Char>): Int {
         if (inGarbage) {
             if (character == '>') {
                 inGarbage = false
-            }
-            else {
+            } else {
                 garbageCount++
             }
         } else if (character == '<') inGarbage = true

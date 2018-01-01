@@ -11,7 +11,8 @@ val input: List<String> by lazy {
 }
 
 fun main(args: Array<String>) {
-    val exampleMachine = listOf("Begin in state A.",
+    val exampleMachine = listOf(
+        "Begin in state A.",
         "Perform a diagnostic checksum after 6 steps.",
         "",
         "In state A:",
@@ -32,7 +33,8 @@ fun main(args: Array<String>) {
         "  If the current value is 1:",
         "    - Write the value 1.",
         "    - Move one slot to the right.",
-        "    - Continue with state A.")
+        "    - Continue with state A."
+    )
 
     assertEquals(3, part1(exampleMachine))
     println("Part 1: ${part1(input)}")
@@ -58,19 +60,24 @@ class Tape {
     operator fun set(index: Int, newValue: Boolean) {
         store[tapeIndex(index)] = newValue
     }
+
     private fun tapeIndex(token: Int) = if (token >= 0) token * 2 else -(token * 2) + 1
 
 }
 
 data class StateRule(val onAction: StateAction, val offAction: StateAction)
 
-data class StateAction(val newValue: Boolean,
-                       val cursorOffset: Int,
-                       val nextState: Char)
+data class StateAction(
+    val newValue: Boolean,
+    val cursorOffset: Int,
+    val nextState: Char
+)
 
-class TuringMachineEmulator(private val stateRules: Map<Char, StateRule>,
-                            val checksumPeriod: Int,
-                            initialState: Char = 'A') {
+class TuringMachineEmulator(
+    private val stateRules: Map<Char, StateRule>,
+    val checksumPeriod: Int,
+    initialState: Char = 'A'
+) {
 
     var cycleCount = 0
 
@@ -90,7 +97,7 @@ class TuringMachineEmulator(private val stateRules: Map<Char, StateRule>,
 
         val action = if (tape[cursorPos]) rule.onAction else rule.offAction
 
-        with (action) {
+        with(action) {
             tape[cursorPos] = newValue
             cursorPos += cursorOffset
             stateKey = nextState
@@ -123,7 +130,8 @@ fun parseStateRule(desc: List<String>): Pair<Char, StateRule> {
 
     val stateKey = desc.first()[9]
 
-    val actions = desc.drop(1)
+    val actions = desc
+        .drop(1)
         .chunked(4)
         .take(2)
         .map { parseStateAction(it) }
@@ -138,7 +146,8 @@ fun parseTuringMachine(desc: List<String>): TuringMachineEmulator {
     val checksumDesc = desc[1]
     val checksumPeriod = checksumDesc.slice(36..checksumDesc.length - 8).toInt()
 
-    val rules = desc.drop(3)
+    val rules = desc
+        .drop(3)
         .chunked(10)
         .map { parseStateRule(it) }
         .toMap()

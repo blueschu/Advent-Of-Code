@@ -18,7 +18,8 @@ const val PART_ONE_ITERATIONS = 40_000_000
 const val PART_TWO_ITERATIONS = 5_000_000
 
 // Make a generator
-fun makeGenerator(seed: Long, factor: Int) = generateSequence(seed) { (it * factor) % 2147483647 }
+fun makeGenerator(seed: Long, factor: Int) =
+    generateSequence(seed) { (it * factor) % 2147483647 }
 
 // The generators
 val generatorA: Sequence<Long> = makeGenerator(GEN_START_A, GEN_FACTOR_A)
@@ -30,7 +31,8 @@ fun main(args: Array<String>) {
     val exampleGenB = makeGenerator(8921, GEN_FACTOR_B)
     assertEquals(588, countTailing16BitMatches(
         exampleGenA.take(PART_ONE_ITERATIONS).iterator(),
-        exampleGenB.take(PART_ONE_ITERATIONS).iterator()))
+        exampleGenB.take(PART_ONE_ITERATIONS).iterator()
+    ))
     println("Part 1: ${part1()}")
 
     assertEquals(309, countTailing16BitMatches(
@@ -40,12 +42,14 @@ fun main(args: Array<String>) {
 }
 
 fun part1(): Int = countTailing16BitMatches(
-        genA = generatorA.take(PART_ONE_ITERATIONS).iterator(),
-        genB = generatorB.take(PART_ONE_ITERATIONS).iterator())
+    genA = generatorA.take(PART_ONE_ITERATIONS).iterator(),
+    genB = generatorB.take(PART_ONE_ITERATIONS).iterator()
+)
 
 fun part2(): Int = countTailing16BitMatches(
-    genA = generatorA.filter {it % 4 == 0L}.take(PART_TWO_ITERATIONS).iterator(),
-    genB = generatorB.filter {it % 8 == 0L}.take(PART_TWO_ITERATIONS).iterator())
+    genA = generatorA.filter { it % 4 == 0L }.take(PART_TWO_ITERATIONS).iterator(),
+    genB = generatorB.filter { it % 8 == 0L }.take(PART_TWO_ITERATIONS).iterator()
+)
 
 fun countTailing16BitMatches(genA: Iterator<Long>, genB: Iterator<Long>): Int {
     var matchCount = 0

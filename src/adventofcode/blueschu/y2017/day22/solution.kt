@@ -10,17 +10,27 @@ val input: List<String> by lazy {
 }
 
 fun main(args: Array<String>) {
-    assertEquals(5587, part1(listOf(
-        "..#",
-        "#..",
-        "...")))
+    assertEquals(
+        5587, part1(
+        listOf(
+            "..#",
+            "#..",
+            "..."
+        )
+    )
+    )
 
     println("Part 1: ${part1(input)}")
 
-    assertEquals(2511944, part2(listOf(
-        "..#",
-        "#..",
-        "...")))
+    assertEquals(
+        2511944, part2(
+        listOf(
+            "..#",
+            "#..",
+            "..."
+        )
+    )
+    )
 
     println("Part 2: ${part2(input)}")
 }
@@ -45,7 +55,10 @@ enum class Direction {
     }
 }
 
-class Position(val loc: Point = Point(0, 0), facing: Direction = Direction.NORTH) {
+class Position(
+    val loc: Point = Point(0, 0),
+    facing: Direction = Direction.NORTH
+) {
     var facing = facing
         private set
 
@@ -73,8 +86,10 @@ abstract class AbstractCarrier(val pos: Position) {
 }
 
 // Carrier for part one
-class CarrierOne(val infectedNodes: MutableList<Point>,
-                 pos: Position = Position()) : AbstractCarrier(pos) {
+class CarrierOne(
+    private val infectedNodes: MutableList<Point>,
+    pos: Position = Position()
+) : AbstractCarrier(pos) {
 
     override fun burst() {
         val position = pos.loc
@@ -94,8 +109,10 @@ class CarrierOne(val infectedNodes: MutableList<Point>,
 enum class NodeStatus { INFECTED, CLEAN, FLAGGED, WEAKENED }
 
 // Carrier for part two
-class CarrierTwo(val affectedNodes: MutableMap<Point, NodeStatus>,
-                 pos: Position = Position()) : AbstractCarrier(pos) {
+class CarrierTwo(
+    private val affectedNodes: MutableMap<Point, NodeStatus>,
+    pos: Position = Position()
+) : AbstractCarrier(pos) {
 
     override fun burst() {
         val position = pos.loc
@@ -152,7 +169,7 @@ fun part1(infectionDesc: List<String>): Int {
 
 fun part2(infectionDesc: List<String>): Int {
     val affectedNodes = parseInfectedNodes(infectionDesc)
-        .associateBy ({ it }, {NodeStatus.INFECTED})
+        .associateBy({ it }, { NodeStatus.INFECTED })
 
     val carrier = CarrierTwo(affectedNodes.toMutableMap())
 

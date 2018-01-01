@@ -8,20 +8,23 @@ fun input(): List<String> =
     File("resources/y2017/day07.txt").useLines { it.toList() }
 
 fun runDemoAssertions() {
-    val demoTower = parseTower(listOf(
-        "pbga (66)",
-        "xhth (57)",
-        "ebii (61)",
-        "havc (66)",
-        "ktlj (57)",
-        "fwft (72) -> ktlj, cntj, xhth",
-        "qoyq (66)",
-        "padx (45) -> pbga, havc, qoyq",
-        "tknk (41) -> ugml, padx, fwft",
-        "jptl (61)",
-        "ugml (68) -> gyxo, ebii, jptl",
-        "gyxo (61)",
-        "cntj (57)"))
+    val demoTower = parseTower(
+        listOf(
+            "pbga (66)",
+            "xhth (57)",
+            "ebii (61)",
+            "havc (66)",
+            "ktlj (57)",
+            "fwft (72) -> ktlj, cntj, xhth",
+            "qoyq (66)",
+            "padx (45) -> pbga, havc, qoyq",
+            "tknk (41) -> ugml, padx, fwft",
+            "jptl (61)",
+            "ugml (68) -> gyxo, ebii, jptl",
+            "gyxo (61)",
+            "cntj (57)"
+        )
+    )
     assertEquals("tknk", demoTower.name)
     assertEquals(60, newWeightOfBadNode(demoTower))
 }
@@ -73,8 +76,10 @@ fun parseTower(structureList: List<String>): TowerNode {
     // map node name to list of child names
     val nonLeafNodes = parsedStructure
         .filter { it.groups[3] != null }
-        .associateBy({ it.groups[1]!!.value },
-            { it.groups[3]!!.value.split(",\\s+".toRegex()) })
+        .associateBy(
+            { it.groups[1]!!.value },
+            { it.groups[3]!!.value.split(",\\s+".toRegex()) }
+        )
 
     nonLeafNodes.forEach {
         val (name, children) = it

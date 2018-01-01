@@ -99,7 +99,7 @@ fun knotHash(stringToBeHashed: String): String {
     val sparseHash = knot.circleMarks
     val denseHash = (0 until 16).map {
         sparseHash
-            .copyOfRange(it * 16,  it * 16 + 16)
+            .copyOfRange(it * 16, it * 16 + 16)
             .reduce { acc, next -> acc xor next }
     }
     return denseHash.fold("") { hash, next: Int ->

@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
     assertTrue { wordsDistinct("aa bb cc dd aaa") }
     println("Part 1: ${part1(input())}")
 
-    assertFalse { anagramsDistinct("abcde xyz ecdab")}
+    assertFalse { anagramsDistinct("abcde xyz ecdab") }
     assertTrue { anagramsDistinct("a ab abc abd abf abj") }
     assertTrue { anagramsDistinct("iiii oiii ooii oooi oooo") }
     println("Part 2: ${part2(input())}")
@@ -29,7 +29,7 @@ fun part1(input: List<String>): Int = input.filter { wordsDistinct(it) }.count()
 
 fun anagramsDistinct(passphrase: String): Boolean {
     val parts = passphrase.split(' ')
-        .map {it.toCharArray().sorted().toString()}
+        .map { it.toCharArray().sorted().toString() }
     val distinctCount = parts.distinct().size
     return parts.size == distinctCount
 }

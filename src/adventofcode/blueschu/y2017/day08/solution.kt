@@ -11,7 +11,8 @@ fun main(args: Array<String>) {
         "b inc 5 if a > 1",
         "a inc 1 if b < 5",
         "c dec -10 if a >= 1",
-        "c inc -20 if c == 10")
+        "c inc -20 if c == 10"
+    )
 
     assertEquals(1, part1(exampleInstructions))
     println("Part 1: ${part1(input())}")
@@ -22,11 +23,17 @@ fun main(args: Array<String>) {
 
 data class Instruction(val action: Action, val condition: Condition)
 
-class Condition(private val registerKey: String,
-                private val operator: ComparisonOperator,
-                private val literal: Int) {
+class Condition(
+    private val registerKey: String,
+    private val operator: ComparisonOperator,
+    private val literal: Int
+) {
     constructor(registerKey: String, operator: String, literal: String) :
-        this (registerKey, ComparisonOperator.parseToken(operator), literal.toInt())
+        this(
+            registerKey,
+            ComparisonOperator.parseToken(operator),
+            literal.toInt()
+        )
 
     enum class ComparisonOperator {
         EQUAL, LESS_THAN, GREATER_THAN, GREATER_OR_EQUAL, LESS_OR_EQUAL, NOT_EQUAL;
@@ -56,14 +63,16 @@ class Condition(private val registerKey: String,
 
 // ensuring expandability as part two may introduce new actions
 // ...it didn't
-abstract class Action (private val registerKey: String) {
-    abstract fun apply(previousValue: Int) : Int
+abstract class Action(private val registerKey: String) {
+    abstract fun apply(previousValue: Int): Int
     fun applyTo(registerTable: RegisterRepository) {
         registerTable[registerKey] = apply(registerTable[registerKey])
     }
 }
 
-class ActionIncrement(registerKey: String, private val magnitude: Int) : Action(registerKey) {
+class ActionIncrement(registerKey: String, private val magnitude: Int) :
+    Action(registerKey) {
+
     override fun apply(previousValue: Int): Int = previousValue + magnitude
 }
 
@@ -101,9 +110,13 @@ class Interpreter(val registerTable: RegisterRepository) {
     fun executeAll(instr: Collection<Instruction>) = instr.forEach { execute(it) }
 }
 
-fun parseAction(registerKey: String, operation: String, literal: String): Action {
+fun parseAction(
+    registerKey: String,
+    operation: String,
+    literal: String
+): Action {
     val literalMagnitude = when (operation) {
-        "inc" ->  literal.toInt()
+        "inc" -> literal.toInt()
         "dec" -> -literal.toInt()
         else -> throw IllegalArgumentException("action operator could not be parsed: $operation")
     }
@@ -114,12 +127,16 @@ fun parseInstruction(instr: String): Instruction {
     val pattern = "^(?<ActReg>\\w+) (?<ActOp>\\w{3}) (?<ActLit>[-\\d]+) if (?<CondReg>\\w+) (?<CondOp>[<=>!]{1,2}) (?<CondLit>[-\\d]+)\$".toRegex()
     val parsedFields = pattern.matchEntire(instr)?.groups
         ?: throw IllegalArgumentException("Malformed instruction: $instr")
-    val action = parseAction(parsedFields["ActReg"]!!.value,
+    val action = parseAction(
+        parsedFields["ActReg"]!!.value,
         parsedFields["ActOp"]!!.value,
-        parsedFields["ActLit"]!!.value)
-    val condition = Condition(parsedFields["CondReg"]!!.value,
+        parsedFields["ActLit"]!!.value
+    )
+    val condition = Condition(
+        parsedFields["CondReg"]!!.value,
         parsedFields["CondOp"]!!.value,
-        parsedFields["CondLit"]!!.value)
+        parsedFields["CondLit"]!!.value
+    )
     return Instruction(action, condition)
 }
 
@@ -135,7 +152,10 @@ fun part2(input: List<String>): Int {
     var maxRegisterValue = Int.MIN_VALUE
     instructions.forEach {
         interpreter.execute(it)
-        maxRegisterValue = max(maxRegisterValue, interpreter.registerTable.maxRegisterValue())
+        maxRegisterValue = max(
+            maxRegisterValue,
+            interpreter.registerTable.maxRegisterValue()
+        )
     }
     return maxRegisterValue
 }
